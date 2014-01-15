@@ -1,0 +1,83 @@
+<?php
+/**
+ * @file
+ * Module which allows control of how missing item covers are displayed.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function ting_null_covers_menu() {
+  $menu = array();
+
+  $menu['admin/config/ting/covers/null'] = array(
+    'title' => 'Empty covers',
+    'description' => 'Configure how empty covers are displayed',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('ting_null_covers_admin_form'),
+    'access arguments' => array('null covers display'),
+    'file' => 'ting_null_covers.admin.inc',
+    'type' => MENU_LOCAL_TASK,
+  );
+
+  return $menu;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function ting_null_covers_permission() {
+  $perm = array();
+
+  $perm['null covers display'] = array(
+    'title' => t('Manage empty covers'),
+    'description' => t('Control how the empty covers are displayed.'),
+  );
+
+  return $perm;
+}
+
+/**
+ * Implements hook_entity_view().
+ *
+ * We cannot oversee if the item has a cover or not, so a request to cover
+ * service is required here.
+ */
+function ting_null_covers_entity_view($entity, $entity_type, $view_mode, $langcode) {
+  if (!variable_get('ting_null_covers_hide', FALSE)) {
+    return;
+  }
+  elseif ($entity_type == 'ting_object' && ($view_mode == 'collection_list' || $view_mode == 'teaser')) {
+    drupal_add_css(drupal_get_path('module', 'ting_null_covers') . '/css/ting_null_covers.styles.css', 'file');
+    $localId = $entity->localId;
+    $unset_image = FALSE;
+
+
+    $path = ting_covers_object_path($localId);
+    // In case when covers were requested earlier and were not found.
+    if (cache_get('ting_covers:' . $localId)) {
+      $unset_image = TRUE;
+    }
+    // In case when cover is missing, check if it actually is missing
+    // at ADDI service.
+    elseif (!file_exists($path)) {
+      $service = new AdditionalInformationService(
+        variable_get('addi_wsdl_url'),
+        variable_get('addi_username'),
+        variable_get('addi_group'),
+        variable_get('addi_password')
+      );
+
+      $additional_informations = $service->getByFaustNumber($localId);
+      $ai = $additional_informations[$localId];
+
+      if (!$ai->detailUrl && !$ai->thumbnailUrl) {
+        $unset_image = TRUE;
+      }
+    }
+
+    if ($unset_image) {
+      unset($entity->content['ting_cover']);
+    }
+  }
+}

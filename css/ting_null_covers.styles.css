@@ -1,0 +1,14 @@
+.pane-search-result .ding-format-long .view-mode-teaser {
+  position: relative !important;
+}
+
+.pane-search-result .ding-format-long .view-mode-teaser .title {
+  position: absolute !important;
+  top: 0 !important;
+  left: 10px !important;
+}
+
+.pane-search-result .ding-format-long .view-mode-teaser .field-type-ting-cover,
+.pane-search-result .ding-format-long .view-mode-teaser .group-content {
+  margin-top: 35px !important;
+}
