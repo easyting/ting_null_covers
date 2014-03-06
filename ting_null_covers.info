@@ -1,5 +1,6 @@
 name = Ting null covers
-description = Remove the default cover image for items without covers
+description = Remove the default cover image for items without covers.
 version = 7.x-0.1
 core = 7.x
 package = Ding!
+dependencies[] = ting_covers
