@@ -1,14 +1,14 @@
-.pane-search-result .ding-format-long .view-mode-teaser {
+.responsive-layout-wide.pane-search-result .ding-format-long .view-mode-teaser {
   position: relative;
 }
 
-.pane-search-result .ding-format-long .view-mode-teaser .title {
+.responsive-layout-wide.pane-search-result .ding-format-long .view-mode-teaser .title {
   position: absolute;
   top: 0;
   left: 10px;
 }
 
-.pane-search-result .ding-format-long .view-mode-teaser .field-type-ting-cover,
-.pane-search-result .ding-format-long .view-mode-teaser .group-content {
+.responsive-layout-wide.pane-search-result .ding-format-long .view-mode-teaser .field-type-ting-cover,
+.responsive-layout-wide.pane-search-result .ding-format-long .view-mode-teaser .group-content {
   margin-top: 35px;
 }
